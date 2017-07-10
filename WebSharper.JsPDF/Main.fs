@@ -88,6 +88,10 @@ module Definition =
             "autoPrint" => T<unit> ^-> T<unit>
 
             // Methods
+            "addMetadata" => T<string> * T<string> ^-> TSelf
+
+            "addPage" => T<unit> ^-> T<unit>
+
             "addFont" => T<string> * T<string> * T<string> ^-> T<obj>
 
             "circle" => T<float>?x * T<float>?y * T<float>?r * T<string>?style ^-> TSelf

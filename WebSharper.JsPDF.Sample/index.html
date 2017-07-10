@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSharper.JsPDF.Sample</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/WebSharper.JsPDF.Sample.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+
+        .pdf-holder {
+            height: 100vh;
+            width:  100%;
+        }
+    </style>
+    <script type="text/javascript" src="Content/WebSharper.JsPDF.Sample.head.js"></script>
+</head>
+<body>
+    <div id="main" ws-children-template="Main">
+        <div class="pdf-holder">
+            <div ws-replace="PDF"></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="Content/WebSharper.JsPDF.Sample.min.js"></script>
+</body>
+</html>
