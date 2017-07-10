@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
@@ -15,6 +15,7 @@
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -46,6 +47,15 @@
     <Content Include="Global.asax" />
     <Compile Include="Global.asax.fs" />
     <Content Include="Setup.fsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.DataSetExtensions.dll" />
+    <Reference Include="System.Web.ApplicationServices.dll" />
+    <Reference Include="System.Web.DynamicData.dll" />
+    <Reference Include="System.Web.Entity.dll" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq.dll" />
+    <Reference Include="System.Xml.Linq.dll" />
   </ItemGroup>
   <Target Name="IncludeContent" BeforeTargets="Compile">
     <ItemGroup>

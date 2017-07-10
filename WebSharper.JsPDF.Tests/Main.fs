@@ -16,6 +16,10 @@ module Client =
                 equalMsg (1 + 1) 2 "1 + 1 = 2"
             }
 
+            Test "JsPDF constructor test" {
+                notEqualMsg (JsPDF.JsPDF()) (JS.Undefined) "JsPDF() constructor"
+            }
+
         }
 
 #if ZAFIR
