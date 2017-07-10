@@ -34,7 +34,7 @@ bt.Solution [
                 Title = Some "WebSharper.JsPDF"
                 LicenseUrl = Some "http://websharper.com/licensing"
                 ProjectUrl = Some "https://github.com/intellifactory/https://github.com/intellifactory/websharper.jspdf"
-                Description = "WebSharper Extension for JsPDF[D[D[D[j[C[C[C[C[C1.3.4"
+                Description = "WebSharper Extension for JsPDF 1.3.4"
                 RequiresLicenseAcceptance = true })
         .Add(main)
 ]
