@@ -31,7 +31,7 @@ bt.Solution [
     bt.NuGet.CreatePackage()
         .Configure(fun c ->
             { c with
-                Title = Some "WebSharper.JsPDF"
+                Title = Some "WebSharper bindings for JsPDF"
                 LicenseUrl = Some "http://websharper.com/licensing"
                 ProjectUrl = Some "https://github.com/intellifactory/https://github.com/intellifactory/websharper.jspdf"
                 Description = "WebSharper Extension for JsPDF 1.3.4"
