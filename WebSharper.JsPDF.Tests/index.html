@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${title}</title>
+    <title>WebSharper.JsPDF</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="Content/WebSharper.JsPDF.Tests.css" />
     <style>
         /* Sticky footer styles */
         html {
@@ -30,6 +31,7 @@
             margin: 20px 0;
         }
     </style>
+    <script type="text/javascript" src="Content/WebSharper.JsPDF.Tests.head.js"></script>
 </head>
 <body>
     <!-- Static navbar -->
@@ -52,7 +54,7 @@
         </div>
     </nav>
     <div class="container">
-        <div data-replace="body">
+        <div id="body">
         </div>
     </div>
     <footer class="footer">
@@ -63,6 +65,6 @@
             </p>
         </div>
     </footer>
-    <script data-replace="scripts"></script>
+    <script type="text/javascript" src="Content/WebSharper.JsPDF.Tests.min.js"></script>
 </body>
 </html>
