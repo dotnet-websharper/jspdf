@@ -16,4 +16,4 @@ files
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.dll ==> lib/netstandard2.0
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.xml ==> lib/netstandard2.0
 dependencies
-        WebSharper ~> LOCKEDVERSION/3
+        WebSharper ~> LOCKEDVERSION:[3]
