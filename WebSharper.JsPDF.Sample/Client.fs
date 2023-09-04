@@ -22,7 +22,6 @@ namespace WebSharper.JsPDF.Sample
 open WebSharper
 open WebSharper.JavaScript
 open WebSharper.JsPDF
-open WebSharper.JQuery
 open WebSharper.UI
 open WebSharper.UI.Client
 open WebSharper.UI.Html
