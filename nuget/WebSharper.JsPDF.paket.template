@@ -11,8 +11,6 @@ description
 tags
     Web JavaScript F# C#
 files
-    ../WebSharper.JsPDF/bin/Release/net461/WebSharper.JsPDF.dll ==> lib/net461
-    ../WebSharper.JsPDF/bin/Release/net461/WebSharper.JsPDF.xml ==> lib/net461
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.dll ==> lib/netstandard2.0
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.xml ==> lib/netstandard2.0
 dependencies
