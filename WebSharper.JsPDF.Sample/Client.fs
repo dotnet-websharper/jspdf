@@ -37,11 +37,11 @@ module Client =
         let doc = new JsPDF()
 
         doc
-            .Text("Hello world!", 10., 10., obj)
-            .Text("Another one", 10., 15., obj) |> ignore
-        doc.AddPage()
-        doc.Text("Hello world on Page 2!", 10., 10., obj) |> ignore
-        let pdf = doc.Output("bloburl", obj).ToString()
+            .Text("Hello world!", 10., 10.)
+            .Text("Another one", 10., 18.) |> ignore
+        doc.AddPage() |> ignore
+        doc.Text("Hello world on Page 2!", 10., 10.) |> ignore
+        let pdf = doc.OutputAsURL().ToString()
 
         let pdfRender =
             Doc.Element "object"
