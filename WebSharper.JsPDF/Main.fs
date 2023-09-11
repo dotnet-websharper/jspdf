@@ -1581,7 +1581,7 @@ module Definition =
                     "set" => HTMLOptions?opt ^-> TSelf
                     "get" => T<string>?key * (T<string>?value ^-> T<unit>)?cbk ^-> TSelf
                     "doCallback" => T<unit> ^-> T<JavaScript.Promise<unit>>
-                    "outputImage" => HTMLWorkerOutputImgType.Type?``type`` ^-> T<JavaScript.Promise<unit>>
+                    "outputImage" => HTMLWorkerOutputImgType.Type?``type`` ^-> T<JavaScript.Promise<string>> |> WithSourceName "outputImg"
                     yield! outputMethods "jsPDF" JsPDFClass
                     "outputPdf" =? (T<unit> ^-> JsPDFClass) |> WithGetterInline """jsPDF["output"]"""
                 ]
