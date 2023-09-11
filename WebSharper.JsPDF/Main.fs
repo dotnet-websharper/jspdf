@@ -1050,8 +1050,6 @@ module Definition =
                 //|> AssemblyWide
             ]
             Namespace "WebSharper.JsPDF" [
-                AnnotationType
-                Annotation
                 OrientationPattern
                 UnitPattern
                 FormatPattern
