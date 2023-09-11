@@ -1151,6 +1151,308 @@ module Definition =
                 |> WithInline "$this.loadFile($url, false, $callback)"
             ]
         
+        module JavaScript =
+            let methodsToApply = ["addJs" => T<string>?javascript ^-> JsPDFClass]
+            
+        module SplitTextToSize =
+            let methodsToApply = [
+                "getCharWidthsArray" => T<string>?text * T<obj>?options ^-> Type.ArrayOf(T<obj>)
+                "getStringUnitWidth" => T<string>?text * T<obj>?options ^-> T<int>
+                "splitTextToSize" => T<string>?text * T<int>?maxLen * T<obj>?options ^-> T<obj>
+            ]
+        module SVG =
+            let methodsToApply = [
+                "addSvgAsImage" => T<string>?svg * T<float>?x * T<float>?y * T<float>?w * T<float>?h
+                                    * (!?T<string>)?alias * (!?T<bool>?compression) * (!?T<float>?rotation)
+                                    ^-> JsPDFClass
+            ]
+            
+        module SetLanguage =
+            let LangCodes = Pattern.EnumStrings "LangCode" [
+                "af"
+                "sq"
+                "ar"
+                "ar-DZ"
+                "ar-BH"
+                "ar-EG"
+                "ar-IQ"
+                "ar-JO"
+                "ar-KW"
+                "ar-LB"
+                "ar-LY"
+                "ar-MA"
+                "ar-OM"
+                "ar-QA"
+                "ar-SA"
+                "ar-SY"
+                "ar-TN"
+                "ar-AE"
+                "ar-YE"
+                "an"
+                "hy"
+                "as"
+                "ast"
+                "az"
+                "eu"
+                "be"
+                "bn"
+                "bs"
+                "br"
+                "bg"
+                "my"
+                "ca"
+                "ch"
+                "ce"
+                "zh"
+                "zh-HK"
+                "zh-CN"
+                "zh-SG"
+                "zh-TW"
+                "cv"
+                "co"
+                "cr"
+                "hr"
+                "cs"
+                "da"
+                "nl"
+                "nl-BE"
+                "en"
+                "en-AU"
+                "en-BZ"
+                "en-CA"
+                "en-IE"
+                "en-JM"
+                "en-NZ"
+                "en-PH"
+                "en-ZA"
+                "en-TT"
+                "en-GB"
+                "en-US"
+                "en-ZW"
+                "eo"
+                "et"
+                "fo"
+                "fj"
+                "fi"
+                "fr"
+                "fr-BE"
+                "fr-CA"
+                "fr-FR"
+                "fr-LU"
+                "fr-MC"
+                "fr-CH"
+                "fy"
+                "fur"
+                "gd"
+                "gd-IE"
+                "gl"
+                "ka"
+                "de"
+                "de-AT"
+                "de-DE"
+                "de-LI"
+                "de-LU"
+                "de-CH"
+                "el"
+                "gu"
+                "ht"
+                "he"
+                "hi"
+                "hu"
+                "is"
+                "id"
+                "iu"
+                "ga"
+                "it"
+                "it-CH"
+                "ja"
+                "kn"
+                "ks"
+                "kk"
+                "km"
+                "ky"
+                "tlh"
+                "ko"
+                "ko-KP"
+                "ko-KR"
+                "la"
+                "lv"
+                "lt"
+                "lb"
+                "mk"
+                "ms"
+                "ml"
+                "mt"
+                "mi"
+                "mr"
+                "mo"
+                "nv"
+                "ng"
+                "ne"
+                "no"
+                "nb"
+                "nn"
+                "oc"
+                "or"
+                "om"
+                "fa"
+                "fa-IR"
+                "pl"
+                "pt"
+                "pt-BR"
+                "pa"
+                "pa-IN"
+                "pa-PK"
+                "qu"
+                "rm"
+                "ro"
+                "ro-MO"
+                "ru"
+                "ru-MO"
+                "sz"
+                "sg"
+                "sa"
+                "sc"
+                "sd"
+                "si"
+                "sr"
+                "sk"
+                "sl"
+                "so"
+                "sb"
+                "es"
+                "es-AR"
+                "es-BO"
+                "es-CL"
+                "es-CO"
+                "es-CR"
+                "es-DO"
+                "es-EC"
+                "es-SV"
+                "es-GT"
+                "es-HN"
+                "es-MX"
+                "es-NI"
+                "es-PA"
+                "es-PY"
+                "es-PE"
+                "es-PR"
+                "es-ES"
+                "es-UY"
+                "es-VE"
+                "sx"
+                "sw"
+                "sv"
+                "sv-FI"
+                "sv-SV"
+                "ta"
+                "tt"
+                "te"
+                "th"
+                "tig"
+                "ts"
+                "tn"
+                "tr"
+                "tk"
+                "uk"
+                "hsb"
+                "ur"
+                "ve"
+                "vi"
+                "vo"
+                "wa"
+                "cy"
+                "xh"
+                "ji"
+                "zu"
+            ]
+            
+            
+            let typesToExport = [LangCodes]
+            let methodsToApply = [
+                "setLanguage" => LangCodes?langCode ^-> JsPDFClass
+            ]
+            
+        module TotalPages =
+            let methodsToApply = [
+                "putTotalPages" => T<string>?pageExpression ^-> JsPDFClass
+            ]
+            
+        module ViewerPreferences =
+            let ViewerScreenPageMode = Pattern.EnumStrings "NonFullScreenPageMode" [
+                "UseNone"; "UseOutlines"; "UseThumbs"; "UseOC"
+            ]
+            
+            let ViewerDirection = Pattern.EnumStrings "ViewerDirection" [
+                "L2R";"R2L"
+            ]
+            
+            let PrintScaling = Pattern.EnumStrings "PrintScaling" [
+                "AppDefault"; "None"
+            ]
+            
+            let DuplexType = Pattern.EnumStrings "Duplex" [
+                "Simplex"; "DuplexFlipShortEdge"; "DuplexFlipLongEdge"; "none"
+            ]
+            
+            let ViewerPreferenceBox = Pattern.EnumStrings "ViewerPreferenceBox" [
+                "MediaBox"; "CropBox"; "TrimBox"; "BleedBox"; "ArtBox"
+            ]
+            
+            
+            let ViewerPreferencesInput =
+                Pattern.Config "ViewerPreferencesInput" {
+                    Required = [
+                        
+                    ]
+                    Optional = [
+                        for n in [
+                            "HideToolbar"
+                            "HideMenubar"
+                            "HideWindowUI"
+                            "FitWindow"
+                            "CenterWindow"
+                            "DisplayDocTitle"
+                        ] do
+                            n, T<bool>
+                        "NonFullScreenPageMode", ViewerScreenPageMode.Type
+                        "Direction", ViewerDirection.Type
+                        for n in ["View";"Print"] do
+                            $"{n}Area", ViewerPreferenceBox.Type
+                            $"{n}Clip", ViewerPreferenceBox.Type
+                        "PrintScaling", PrintScaling.Type
+                        "Duplex", DuplexType.Type
+                        "PickTrayByPDFSize", T<bool>
+                        "PrintPageRange", Type.ArrayXD 2 T<int>
+                        "NumCopies", T<int>
+                    ] 
+                }
+            
+            let typesToExport = [
+                ViewerScreenPageMode
+                ViewerDirection
+                PrintScaling
+                DuplexType
+                ViewerPreferenceBox
+                ViewerPreferencesInput
+            ]
+            let methodsToApply = [
+                "viewerPreferences" => ViewerPreferencesInput?options * T<bool>?doReset ^-> JsPDFClass
+                // "viewerPreferencesReset" => T<unit> ^-> JsPDFClass |> WithInline """$this.viewerPreferences(arg: "reset")"""
+            ]
+            
+        module VFS =
+            let methodsToApply = [
+                "existsFileInVFS" => T<string>?fileName ^-> T<bool>
+                "addFileToVFS" => T<string>?fileName * T<string>?fileContent ^-> JsPDFClass
+                "getFileFromVFS" => T<string>?fileName ^-> T<string>
+            ]
+            
+        module XmpMetadata =
+            let methodsToApply = [
+                "addXmpMetadata" => T<string>?metadata * T<string>?namespaceUri ^-> JsPDFClass |> WithSourceName "addMetadata"
+            ]
+        
         module Html =
             let Html2CanvasOptions = Pattern.Config "Html2CanvasOptions" {
                 Required = []
@@ -1313,6 +1615,8 @@ module Definition =
             for t in Canvas.typesToExport do t
             for t in Cell.typesToExport do t
             for t in Outline.typesToExport do t
+            for t in SetLanguage.typesToExport do t
+            for t in ViewerPreferences.typesToExport do t
         ]
         let methodsToApply : CodeModel.IClassMember list =
             [
@@ -1327,6 +1631,13 @@ module Definition =
                 for m in Cell.methodsToApply do m
                 for m in Outline.methodsToApply do m
                 for m in FileLoading.methodsToApply do m
+                for m in SplitTextToSize.methodsToApply do m
+                for m in SVG.methodsToApply do m
+                for m in SetLanguage.methodsToApply do m
+                for m in TotalPages.methodsToApply do m
+                for m in ViewerPreferences.methodsToApply do m
+                for m in VFS.methodsToApply do m
+                for m in XmpMetadata.methodsToApply do m
                 
             ]
     
