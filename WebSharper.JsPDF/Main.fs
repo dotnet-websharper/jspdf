@@ -299,7 +299,7 @@ module Definition =
         ]
     }
     
-    let TextOptionsAlign = Pattern.EnumStrings "TextOptions.Align" [
+    let TextOptionsAlign = Pattern.EnumStrings "TextOptionsAlign" [
         "left";"right";"center";"justify"
     ]
     
@@ -867,6 +867,289 @@ module Definition =
                 "addField" => AcroFormField?field ^-> JsPDFClass
             ]
             
+        module Context2d =
+            let Gradient = 
+              Class "Gradient" 
+              |+> Instance [ 
+                "addColorStop" => T<float>?position * T<string>?color ^-> T<unit>
+                "getColor" => T<unit> ^-> T<string>
+              ]
+            let ContextTextAlign = Pattern.EnumStrings "Context2DTextAlign" ["right"; "end"; "center"; "left"; "start"]
+            let ContextTextBaseline = Pattern.EnumStrings "Context2D.TextBaseline" [
+                "alphabetic"
+                "bottom"
+                "top"
+                "hanging"
+                "middle"
+                "ideographic"
+            ]
+            
+            let ContextCompositeOperation = Pattern.EnumStrings "Context2D.CompositeOperation" ["source-over"]
+            let ContextImageSmoothingQuality = Pattern.EnumStrings "Context2D.ImageSmoothingQuality" ["low";"high"]
+            
+            let ContextLineCap = Pattern.EnumStrings "Context2D.LineCap" ["butt";"round";"square"]
+            
+            let ContextLineJoin = Pattern.EnumStrings "Context2D.LineJoin" ["bevel";"round";"miter"]
+            let Context2d =
+                Class "Context2D"
+                |+> Instance [
+                    "autoPaging" => T<bool>
+                    "margin" =@ Type.ArrayOf T<float>
+                    "fillStyle" => T<string> + Gradient
+                    "filter" => T<string>
+                    "font" => T<string>
+                    "globalAlpha" => T<float>
+                    "globalCompositeOperation" =? ContextCompositeOperation
+                    "imageSmoothingEnabled" =@ T<bool>
+                    "imageSmoothingQuality" =? ContextImageSmoothingQuality
+                    "ignoreClearRect" =@ T<bool>
+                    "lastBreak" =@ T<float>
+                    "lineCap" =@ ContextLineCap
+                    "lineDashOffset" => T<float>
+                    "lineJoin" =@ ContextLineJoin
+                    "lineWidth" => T<float>
+                    "miterLimit" => T<float>
+                    "pageBreaks" =@ Type.ArrayOf T<float>
+                    "pageWrapXEnabled" => T<bool>
+                    "pageWrapYEnabled" => T<bool>
+                    "posX" => T<float>
+                    "posY" => T<float>
+                    "shadowBlur" => T<float>
+                    "shadowColor" => T<string>
+                    "shadowOffsetX" => T<float>
+                    "shadowOffsetY" => T<float>
+                    "strokeStyle" => T<string> + Gradient
+                    "textBaseline" => ContextTextBaseline.Type
+                    "textAlign" => ContextTextAlign.Type
+                    "arc" => 
+                      (T<float>?x *
+                      T<float>?y *
+                      T<float>?radius *
+                      T<float>?startAngle *
+                      T<float>?endAngle *
+                      T<bool>?counterclockwise)
+                    ^-> T<unit>
+                    "arcTo" => T<float>?x1 * T<float>?y1 * T<float>?x2 * T<float>?y2 * T<float>?radius ^-> T<unit>
+                    "beginPath" => T<unit> ^-> T<unit>
+                    "bezierCurveTo" =>
+                      T<float>?cp1x *
+                      T<float>?cp1y *
+                      T<float>?cp2x *
+                      T<float>?cp2y *
+                      T<float>?x *
+                      T<float>?y    ^-> T<unit>
+                    "clearRect" => T<float>?x * T<float>?y * T<float>?w * T<float>?h ^-> T<unit>
+                    "clip" =>  T<unit> ^-> JsPDFClass
+                    "clipEvenOdd" =>  T<unit> ^-> JsPDFClass
+                    "closePath" =>  T<unit> ^-> T<unit>
+                    "createLinearGradient" =>
+                      T<float>?x0 *
+                      T<float>?y0 *
+                      T<float>?x1 *
+                      T<float>?y1     ^-> Gradient
+                    "createPattern" => T<unit> ^-> Gradient
+                    "createRadialGradient" => T<unit> ^-> Gradient
+                    "drawImage" =>
+                      T<string>?img *
+                      T<float>?x *
+                      T<float>?y *
+                      T<float>?width *
+                      T<float>?height    ^-> T<unit>
+                    "drawImage" =>
+                      T<string>?img *
+                      T<float>?sx *
+                      T<float>?sy *
+                      T<float>?swidth *
+                      T<float>?sheight *
+                      T<float>?x *
+                      T<float>?y *
+                      T<float>?width *
+                      T<float>?height    ^-> T<unit>
+                    "fill" => T<unit> ^-> T<unit>
+                    "fillRect" => T<float>?x * T<float>?y * T<float>?w * T<float>?h ^-> T<unit>
+                    "fillText" => T<string>?text * T<float>?x * T<float>?y * !?T<float>?maxWidth ^-> T<unit>
+                    "lineTo" => T<float>?x * T<float>?y ^-> T<unit>
+                    "measureText" => T<string>?text ^-> T<float>
+                    "moveTo" => T<float>?x * T<float>?x ^-> T<unit>
+                    "quadraticCurveTo" => T<float>?cpx * T<float>?cpy * T<float>?x * T<float>?y ^-> T<unit>
+                    "rect" => T<float>?x * T<float>?y * T<float>?w * T<float>?h ^-> T<unit>
+                    "restore" => T<unit> ^-> T<unit>
+                    "rotate" => T<float>?angle ^-> T<unit>
+                    "save" => T<unit> ^-> T<unit>
+                    "scale" => T<float>?scalewidth * T<float>?scaleheight ^-> T<unit>
+                    "setTransform" =>
+                      T<float>?a *
+                      T<float>?b *
+                      T<float>?c *
+                      T<float>?d *
+                      T<float>?e *
+                      T<float>?f    ^-> T<unit>
+                    "stroke" => T<unit> ^-> T<unit>
+                    "strokeRect" => T<float>?x * T<float>?y * T<float>?w * T<float>?h ^-> T<unit>
+                    "strokeText" => T<string>?text * T<float>?x * T<float>?y * !?T<float>?maxWidth ^-> T<unit>
+                    "transform" =>
+                      T<float>?a *
+                      T<float>?b *
+                      T<float>?c *
+                      T<float>?d *
+                      T<float>?e *
+                      T<float>?f    ^-> T<unit>
+                    "translate" => T<float> * T<float> ^-> T<unit>
+                ]
+                
+                
+            let typesToExport = [
+                Gradient
+                ContextTextAlign
+                ContextTextBaseline
+                ContextCompositeOperation
+                ContextImageSmoothingQuality
+                ContextLineCap
+                ContextLineJoin
+                Context2d
+            ]
+            let methodsToApply = [
+                "context2d" =? Context2d
+            ]
+            
+        module Canvas =
+            open Context2d
+            
+            let Canvas =
+                Class "Canvas"
+                |+> Instance [
+                    "pdf" =? JsPDFClass
+                    "width" =@ T<float>
+                    "height" =@ T<float>
+                    "getContext" => !? T<string>?``type`` ^-> Context2d
+                ]
+            let typesToExport = [Canvas]
+            let methodsToApply = [
+                "canvas" =? Canvas
+            ]
+            
+        module Cell =
+            let CellAlign = Pattern.EnumStrings "CellAlign" [
+                "left";"center";"right"
+            ]
+            let CellConfig = Pattern.Config "CellConfig" {
+                Required = [
+                    "name", T<string>
+                    "prompt", T<string>
+                    "align", CellAlign.Type
+                    "padding", T<float>
+                    "width", T<float>
+                ]
+                Optional = []
+            }
+            let CellOptions =
+                Pattern.Config "Cell.Options" {
+                    Required = []
+                    Optional = [
+                        "font", T<string>
+                        "fontSize", T<int>
+                        "maxWidth", T<float>
+                        "scaleFactor", T<float>
+                    ] 
+                }
+            let CellSize =
+                Class "Cell.Size"
+                |+> Instance [
+                    "Width" =? T<float> |> WithSourceName "w"
+                    "Height" =? T<float> |> WithSourceName "h"
+                ]
+                
+            let TableRowData = Pattern.Config "TableRowData" {
+                Required = []
+                Optional = [
+                    "row", T<int>
+                    "data", T<obj>
+                ]
+            }
+                
+            let TableCellData = Pattern.Config "TableCellData" {
+                Required = []
+                Optional = [
+                    "row", T<int>
+                    "col", T<int>
+                    "data", T<obj>
+                ]
+            }
+            
+            let TableCellCss = Pattern.Config "TableCellCss" {
+                Required = [
+                    "font-size", T<int>
+                ]
+                Optional = []
+            }
+            let TableConfig = Pattern.Config "TableConfig" {
+                Required = []
+                Optional = [
+                    "printHeaders", T<bool>
+                    "autoSize", T<bool>
+                    "margins", T<float>
+                    "fontSize", T<int>
+                    "padding", T<float>
+                    "headerBackgroundColor", T<string>
+                    "headerTextColor", T<string>
+                    "rowStart", TableRowData?e * JsPDFClass?pdf ^-> T<unit>
+                    "cellStart", TableCellData?e * JsPDFClass?pdf ^-> T<unit>
+                ]
+            }
+            let typesToExport = [
+                CellAlign
+                CellConfig
+                CellOptions
+                CellSize
+                TableRowData
+                TableCellData
+                TableCellCss
+                TableConfig
+            ]
+            let methodsToApply = [
+                "setHeaderFunction" => (JsPDFClass?pdf * T<int>?pages ^-> Type.ArrayOf(T<int>))?func ^-> T<unit>
+                "getTextDimensions" => T<string>?text * !?CellOptions?options ^-> CellSize
+                "cellAddPage" => T<unit> ^-> JsPDFClass
+                "cell" => T<float>?x * T<float>?y * T<float>?w * T<float>?h * T<string>?txt * T<int>?ln * T<string>?align ^-> JsPDFClass
+                "table" => T<float>?x * T<float>?y
+                               * T<System.Collections.Generic.Dictionary<string,string>>?data
+                               * (Type.ArrayOf(T<string>) + Type.ArrayOf(CellConfig))?headers * TableConfig?config
+                           ^-> JsPDFClass
+                "calculateLineHeight" => Type.ArrayOf(T<string>)?headerNames * Type.ArrayOf(T<int>)?columnWidths * Type.ArrayOf(T<obj>)?model ^-> JsPDFClass
+                "setTableHeaderRow" => Type.ArrayOf(CellConfig)?config ^-> T<unit>
+                "printHeaderRow" => T<int>?lineNumber * (!?T<bool>)?new_page ^-> T<unit>
+                
+            ]
+        
+        module Outline =
+            let OutlineItem =
+                Class "OutlineItem"
+                |+> Instance [
+                    "title" =@ T<string>
+                    "options" =@ T<obj>
+                    "children" =@ Type.ArrayOf T<obj>
+                ]
+            let OutlineOptions = Pattern.Config "OutlineOptions" {
+                Required = [
+                    "pageNumber", T<int>
+                ]
+                Optional = [] 
+            }
+            
+            let typesToExport = [
+                OutlineItem
+                OutlineOptions
+            ]
+            let methodsToApply = [
+                "add" => T<obj>?parent * T<string>?title * OutlineOptions?options ^-> OutlineItem    
+            ]
+            
+        module FileLoading =
+            let methodsToApply = [
+                "loadFile" => T<string>?url * (!?T<bool>)?sync ^-> T<string>
+                "loadFile" => T<string>?url * (T<string>?data ^-> T<string>)?callback ^-> T<unit>
+                |> WithInline "$this.loadFile($url, false, $callback)"
+            ]
         
         module Html =
             let Html2CanvasOptions = Pattern.Config "Html2CanvasOptions" {
@@ -1026,8 +1309,12 @@ module Definition =
             for t in AcroForm.typesToExport do t
             for t in Html.typesToExport do t
             for t in AutoPrint.typesToExport do t
+            for t in Context2d.typesToExport do t
+            for t in Canvas.typesToExport do t
+            for t in Cell.typesToExport do t
+            for t in Outline.typesToExport do t
         ]
-        let methodsToApply =
+        let methodsToApply : CodeModel.IClassMember list =
             [
                 for m in AddImage.methodsToApply do m
                 for m in Arabic.methodsToApply do m
@@ -1035,6 +1322,12 @@ module Definition =
                 for m in AcroForm.methodsToApply do m
                 for m in Html.methodsToApply do m
                 for m in AutoPrint.methodsToApply do m
+                for m in Context2d.methodsToApply do m
+                for m in Canvas.methodsToApply do m
+                for m in Cell.methodsToApply do m
+                for m in Outline.methodsToApply do m
+                for m in FileLoading.methodsToApply do m
+                
             ]
     
     JsPDFClass
