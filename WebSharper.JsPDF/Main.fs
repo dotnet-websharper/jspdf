@@ -378,7 +378,7 @@ module Definition =
         |> List.map (fun x -> x :> CodeModel.IClassMember)
     let JsPDFClass =
         Class "jsPDF"
-        |> ImportDefault "jspdf"
+        |> ImportDefault "jsPDF"
         |+> Static [
             Constructor JsPDFOptions.Type?options
             Constructor (
@@ -762,6 +762,7 @@ module Definition =
             
             let AcroFormField =
                 AbstractClass "AcroFormField"
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     "showWhenPrinted" =@ T<bool>
                     "x" =@ T<float>
@@ -780,11 +781,14 @@ module Definition =
                         n =@ T<bool>
                     "textAlign" =@ TextAlign.Type
                 ]
-                |+> Static [Constructor T<unit>]
             
-            let AcroFormChoiceField =
-                Class "AcroFormChoiceField"
+            let AcroField n =
+                Class n
                 |=> Inherits AcroFormField
+                |+> Static [Constructor T<unit>]
+                
+            let AcroFormChoiceField =
+                AcroField "AcroFormChoiceField"
                 |+> Instance [
                     for n in ["combo";"edit";"sort";"multiSelect";"doNotSpellCheck";"commitOnSelChange"] do
                             n =@ T<bool>
@@ -794,25 +798,35 @@ module Definition =
                     "addOption" => T<string>?value ^-> T<unit>
                     "removeOption" => T<string>?value * T<bool>?allEntries ^-> T<unit>
                 ]
-            let AcroFormListBox = Class "AcroFormListBox" |=> Inherits AcroFormChoiceField
-            let AcroFormComboBox = Class "AcroFormComboBox" |=> Inherits AcroFormChoiceField
-            let AcroFormEditBox = Class "AcroFormEditBox" |=> Inherits AcroFormChoiceField
+            let AcroChoice n =
+                Class n
+                |=> Inherits AcroFormChoiceField
+                |+> Static [Constructor T<unit>]
+                
+            let AcroFormListBox = 
+                AcroChoice "AcroFormListBox" 
+            let AcroFormComboBox = 
+                AcroChoice "AcroFormComboBox" 
+            let AcroFormEditBox = 
+                AcroChoice "AcroFormEditBox" 
             
             let AcroFormButton =
-                Class "AcroFormButton"
-                |=> Inherits AcroFormField
+                AcroField "AcroFormButton"
                 |+> Instance [
                     for n in ["noToggleToOff";"radio";"pushButton";"radioIsUnison"] do
                         n =@ T<bool>
                     "caption" =@ T<string>
                     "appearanceState" =@ AcroFormAppearanceState
                 ]
-            
-            let AcroFormPushButton = Class "AcroFormPushButton" |=> Inherits AcroFormButton
+            let AcroBtn n =
+                Class n
+                |=> Inherits AcroFormButton
+                |+> Static [Constructor T<unit>]
+            let AcroFormPushButton =
+                AcroBtn "AcroFormPushButton"
             
             let AcroFormChildClass =
-                Class "AcroFormChildClass"
-                |=> Inherits AcroFormField
+                AcroField "AcroFormChildClass"
                 |+> Instance [
                     "Parent" =@ T<obj>
                     "optionName" =@ T<string>
@@ -821,46 +835,48 @@ module Definition =
                 ]
             
             let AcroFormRadioButton =
-                Class "AcroFormRadioButton"
-                |=> Inherits AcroFormButton
+                AcroBtn "AcroFormRadioButton"
                 |+> Instance [
                     "setAppearance" => T<string>?appearance ^-> T<unit>
                     "createOption" => T<string>?name ^-> AcroFormChildClass
                 ]
             
             let AcroFormCheckBox =
-                Class "AcroFormCheckBox"
-                |=> Inherits AcroFormButton
+                AcroBtn "AcroFormCheckBox"
                 |+> Instance [
                     "appearanceState" =@ AcroFormAppearanceState.Type
                 ]
                 
             let AcroFormTextField =
-                Class "AcroFormTextField"
-                |=> Inherits AcroFormField
+                AcroField "AcroFormTextField"
                 |+> Instance [
                     for n in ["multiline";"fileSelect";"doNotSpellCheck";"doNotScroll";"comb";"richText";"hasAppearanceStream"] do
                         n =@ T<bool>
                     "maxLength" =@ T<int>
                 ]
+            
             let AcroFormPasswordField =
                 Class "AcroFormPasswordField"
                 |=> Inherits AcroFormTextField
+                |+> Static [Constructor T<unit>]
             
             let AcroForm =
-                Class "AcroForm"
+                AbstractClass "AcroForm"
                 |+> Instance [
-                    "ChoiceField" => T<unit> ^-> AcroFormChoiceField
-                    "ListBox" => T<unit> ^-> AcroFormListBox
-                    "ComboBox" => T<unit> ^-> AcroFormComboBox
-                    "EditBox" => T<unit> ^-> AcroFormEditBox
-                    "Button" => T<unit> ^-> AcroFormButton
-                    "PushButton" => T<unit> ^-> AcroFormPushButton
-                    "RadioButton" => T<unit> ^-> AcroFormRadioButton
-                    "CheckBox" => T<unit> ^-> AcroFormCheckBox
-                    "TextField" => T<unit> ^-> AcroFormTextField
-                    "PasswordField" => T<unit> ^-> AcroFormPasswordField
-                    "Appearance" => T<unit> ^-> T<obj>
+                    let construct t n =
+                        n => T<unit> ^-> t |> WithInline $"new $this.{n}()"
+                    
+                    "ChoiceField" |> construct AcroFormChoiceField
+                    "ListBox" |> construct AcroFormListBox
+                    "ComboBox" |> construct AcroFormComboBox
+                    "EditBox" |> construct AcroFormEditBox
+                    "Button" |> construct AcroFormButton
+                    "PushButton" |> construct AcroFormPushButton
+                    "RadioButton" |> construct AcroFormRadioButton
+                    "CheckBox" |> construct AcroFormCheckBox
+                    "TextField" |> construct AcroFormTextField
+                    "PasswordField" |> construct AcroFormPasswordField
+                    "Appearance" |> construct T<obj>
                 ]
             let typesToExport = [
                 TextAlign
@@ -882,6 +898,8 @@ module Definition =
             ]
             let methodsToApply : CodeModel.IClassMember list = [
                 "addField" => AcroFormField?field ^-> JsPDFClass
+            ]
+            let staticToApply : CodeModel.IClassMember list = [
                 "AcroForm" =? AcroForm.Type
             ]
             
@@ -1662,6 +1680,9 @@ module Definition =
     JsPDFClass
     |+> Instance [
         for m in Plugins.methodsToApply do m
+    ]
+    |+> Static [
+        for m in Plugins.AcroForm.staticToApply do m
     ]
     |> ignore
     
