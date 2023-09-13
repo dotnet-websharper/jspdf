@@ -782,13 +782,10 @@ module Definition =
                     "textAlign" =@ TextAlign.Type
                 ]
             
-            let AcroField n =
-                Class n
+            let AcroFormChoiceField =
+                Class "AcroFormChoiceField"
                 |=> Inherits AcroFormField
                 |+> Static [Constructor T<unit>]
-                
-            let AcroFormChoiceField =
-                AcroField "AcroFormChoiceField"
                 |+> Instance [
                     for n in ["combo";"edit";"sort";"multiSelect";"doNotSpellCheck";"commitOnSelChange"] do
                             n =@ T<bool>
@@ -798,35 +795,39 @@ module Definition =
                     "addOption" => T<string>?value ^-> T<unit>
                     "removeOption" => T<string>?value * T<bool>?allEntries ^-> T<unit>
                 ]
-            let AcroChoice n =
-                Class n
-                |=> Inherits AcroFormChoiceField
-                |+> Static [Constructor T<unit>]
-                
             let AcroFormListBox = 
-                AcroChoice "AcroFormListBox" 
+                Class "AcroFormListBox" 
+                |+> Static [Constructor T<unit>]
+                |=> Inherits AcroFormChoiceField
             let AcroFormComboBox = 
-                AcroChoice "AcroFormComboBox" 
+                Class "AcroFormComboBox" 
+                |+> Static [Constructor T<unit>]
+                |=> Inherits AcroFormChoiceField
             let AcroFormEditBox = 
-                AcroChoice "AcroFormEditBox" 
+                Class "AcroFormEditBox" 
+                |+> Static [Constructor T<unit>]
+                |=> Inherits AcroFormChoiceField
             
             let AcroFormButton =
-                AcroField "AcroFormButton"
+                Class "AcroFormButton"
+                |=> Inherits AcroFormField
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     for n in ["noToggleToOff";"radio";"pushButton";"radioIsUnison"] do
                         n =@ T<bool>
                     "caption" =@ T<string>
                     "appearanceState" =@ AcroFormAppearanceState
                 ]
-            let AcroBtn n =
-                Class n
+            
+            let AcroFormPushButton =
+                Class "AcroFormPushButton"
                 |=> Inherits AcroFormButton
                 |+> Static [Constructor T<unit>]
-            let AcroFormPushButton =
-                AcroBtn "AcroFormPushButton"
             
             let AcroFormChildClass =
-                AcroField "AcroFormChildClass"
+                Class "AcroFormChildClass"
+                |=> Inherits AcroFormField
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     "Parent" =@ T<obj>
                     "optionName" =@ T<string>
@@ -835,26 +836,31 @@ module Definition =
                 ]
             
             let AcroFormRadioButton =
-                AcroBtn "AcroFormRadioButton"
+                Class "AcroFormRadioButton"
+                |=> Inherits AcroFormButton
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     "setAppearance" => T<string>?appearance ^-> T<unit>
                     "createOption" => T<string>?name ^-> AcroFormChildClass
                 ]
             
             let AcroFormCheckBox =
-                AcroBtn "AcroFormCheckBox"
+                Class "AcroFormCheckBox"
+                |=> Inherits AcroFormButton
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     "appearanceState" =@ AcroFormAppearanceState.Type
                 ]
                 
             let AcroFormTextField =
-                AcroField "AcroFormTextField"
+                Class "AcroFormTextField"
+                |=> Inherits AcroFormField
+                |+> Static [Constructor T<unit>]
                 |+> Instance [
                     for n in ["multiline";"fileSelect";"doNotSpellCheck";"doNotScroll";"comb";"richText";"hasAppearanceStream"] do
                         n =@ T<bool>
                     "maxLength" =@ T<int>
                 ]
-            
             let AcroFormPasswordField =
                 Class "AcroFormPasswordField"
                 |=> Inherits AcroFormTextField
