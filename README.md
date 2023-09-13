@@ -1,5 +1,5 @@
 # WebSharper.JsPDF
 
-WebSharper Extension for JsPDF 1.3.4
+WebSharper bindings for JsPDF 2.5.1
 
 * [Source Repository](https://github.com/intellifactory/websharper.jspdf)
