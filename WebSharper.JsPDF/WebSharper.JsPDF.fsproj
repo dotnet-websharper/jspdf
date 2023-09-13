@@ -1,9 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <WebSharperProject>Extension</WebSharperProject>
+    <WebSharperProject>binding</WebSharperProject>
     <WebSharperSourceMap>false</WebSharperSourceMap>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<Product>WebSharper.JsPDF 2.5.1+</Product>
+	<Title>https://github.com/dotnet-websharper/jspdf/</Title>
+	<Company>IntelliFactory</Company>
+	<Copyright>(c) 2023 IntelliFactory</Copyright>
+  </PropertyGroup>
+  <PropertyGroup>
+	<NpmDependencies>
+		<NpmPackage Name="jspdf" Version="gt= 2.5.1 lt 3.0.0" ResolutionStrategy="Max" />
+	</NpmDependencies>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.fs" />

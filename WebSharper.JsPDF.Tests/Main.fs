@@ -20,6 +20,7 @@
 namespace WebSharper.JsPDF.Tests
 
 open WebSharper
+open WebSharper.JsPDF
 open WebSharper.Sitelets
 open WebSharper.UI
 
@@ -37,6 +38,14 @@ module Client =
 
             Test "JsPDF constructor test" {
                 notEqualMsg (JsPDF.JsPDF()) (JS.Undefined) "JsPDF() constructor"
+            }
+            
+            Test "Promise test" {
+                let! valami = JsPDF().Html("<body><h1>Hello world</h1></body>").outputImg(HTMLWorkerOutputImgType.Dataurlstring)
+                notEqualMsg
+                    valami
+                    JS.Undefined
+                    "HTMLWorker OutputImg"
             }
 
         }
