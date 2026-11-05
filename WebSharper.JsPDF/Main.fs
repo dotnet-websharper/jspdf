@@ -378,7 +378,7 @@ module Definition =
         |> List.map (fun x -> x :> CodeModel.IClassMember)
     let JsPDFClass =
         Class "jsPDF"
-        |> ImportDefault "jsPDF"
+        |> ImportDefault "jspdf"
         |+> Static [
             Constructor JsPDFOptions.Type?options
             Constructor (
