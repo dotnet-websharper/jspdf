@@ -15,6 +15,7 @@ tags
     Web JavaScript F# C#
 files
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.dll ==> lib/netstandard2.0
+    ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.websharper ==> lib/netstandard2.0
     ../WebSharper.JsPDF/bin/Release/netstandard2.0/WebSharper.JsPDF.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
