@@ -8,25 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Client.fs" />
     <None Include="package.json" />
     <None Include="esbuild.config.mjs" />
     <None Include="wsconfig.json" />
     <Content Include="index.html" />
+    <Content Include="site.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../WebSharper.JsPDF\WebSharper.JsPDF.fsproj" />
+    <ProjectReference Include="../WebSharper.JsPDF/WebSharper.JsPDF.fsproj" />
   </ItemGroup>
 
   <Target Name="ESBuildBundle" AfterTargets="WebSharperCompile">
     <Exec Command="npm install" />
     <Exec Command="node ./esbuild.config.mjs" />
-  </Target>
-
-  <Target Name="CopyIndex" AfterTargets="Build">
-    <Copy SourceFiles="index.html" DestinationFolder="../dist" />
   </Target>
 
   <Import Project="..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets" Condition="Exists('..\paket-files\wsbuild\github.com\dotnet-websharper\build-script\WebSharper.Fake.targets')" />
