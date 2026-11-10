@@ -29,13 +29,20 @@ module Definition =
         Pattern.EnumStrings "orientation" [
             "portrait"
             "landscape"
+            "p"
+            "l"
         ]
 
     let UnitPattern =
         Pattern.EnumStrings "unit" [
             "pt"
+            "px"
+            "in"
             "mm"
             "cm"
+            "ex"
+            "em"
+            "pc"
         ]
 
     let FormatPattern =
@@ -261,6 +268,7 @@ module Definition =
             "precision", T<int>
             "userUnit", T<double>
             "hotfixes", !| T<string>
+            "filters", !| T<string>
             "encryption", PdfEncryption.Type
             "floatPrecision", T<double> + FloatPrecision
 
@@ -287,6 +295,20 @@ module Definition =
             "objId", T<int>
             "pageNumber", T<int>
             "pageContext", T<obj>
+        ]
+        Optional = []
+    }
+
+    let Font = Pattern.Config "Font" {
+        Required = [
+            "id", T<int>
+            "encoding", T<string>
+            "fontName", T<string>
+            "fontStyle", T<string>
+            "isStandardFont", T<bool>
+            "metadata", T<obj>
+            "objectNumber", T<int>
+            "postScriptName", T<string>
         ]
         Optional = []
     }
@@ -392,6 +414,8 @@ module Definition =
         ]
         |+> Instance [
             let Style = T<string>?style
+            "CapJoinStyles" =@ T<obj>
+
             "compatAPI" => (TSelf ^-> T<unit>)?body ^-> T<unit>
             
             "advancedAPI" => (TSelf ^-> T<unit>)?body ^-> T<unit>
@@ -399,6 +423,7 @@ module Definition =
             "isAdvancedApi" => T<unit> ^-> T<bool>
             
             "addMetadata" => (T<string> * T<string>) ^-> TSelf
+            "addMetadata" => (T<string> * T<bool>) ^-> TSelf
 
             "addPage" => (!? (T<string> + T<int>)?format) * (!? OrientationPattern)?orientation ^-> TSelf
             
@@ -459,7 +484,7 @@ module Definition =
             
             "curveTo" => T<float>?x1 * T<float>?y1 * T<float>?x2 * T<float>?y2 * T<float>?x3 * T<float>?y3 ^-> TSelf
             
-            "getCharSpace" => T<unit> ^-> T<int>
+            "getCharSpace" => T<unit> ^-> T<double>
 
             "getCreationDate" => T<string>?``type`` ^-> T<JavaScript.Date>
             
@@ -471,9 +496,9 @@ module Definition =
             
             "getFillColor" => T<unit> ^-> T<string>
             
-            "getFont" => T<unit> ^-> T<string>
+            "getFont" => T<unit> ^-> Font
 
-            "getFontList" => T<unit> ^-> T<System.Collections.Generic.Dictionary<string,string>>
+            "getFontList" => T<unit> ^-> T<System.Collections.Generic.Dictionary<string,string[]>>
 
             "getFontSize" => T<unit> ^-> T<double>
             
@@ -505,7 +530,7 @@ module Definition =
             
             yield! (outputMethods "$this" TSelf)
             
-            "output" => T<unit> ^-> TSelf
+            "output" => T<unit> ^-> T<string>
             // "outputAsBlob" => T<unit> ^-> T<JavaScript.Blob>
             //                 |> WithInline """$this.output("blob")"""
             //                 
@@ -568,6 +593,8 @@ module Definition =
 
             "setFontSize" => T<float> ^-> TSelf
 
+            "setGState" => T<obj>?gState ^-> TSelf
+
             "setLineCap" => T<string> + T<float> ^-> TSelf
             
             "setLineDashPattern" => Type.ArrayOf(T<float>)?dashArray * T<int>?dashPhase ^-> TSelf
@@ -584,6 +611,7 @@ module Definition =
 
             "setR2L" => T<bool>?value ^-> TSelf
 
+            "setTextColor" => T<string> ^-> TSelf
             "setTextColor" => T<float>?ch1 * T<float>?ch2 * T<float>?ch3 * (!?T<float>?ch4) ^-> TSelf
 
             "text" => (T<string> + !| T<string>)?text * T<float>?x * T<float>?y * (!?TextOptionsLight?options) * (!?(T<float> + T<obj>))?transform ^-> TSelf
@@ -593,6 +621,8 @@ module Definition =
             // getHorizontalCoordinateString, getVerticalCoordinateString
             for n in [|"Horizontal";"Vertical"|] do
                 $"get{n}CoordinateString" => T<float>?value ^-> T<float>
+
+            "allowFsRead" =@ Type.ArrayOf T<string>
         ]
 
     module Plugins =
@@ -740,7 +770,7 @@ module Definition =
                 "createAnnotation" => Annotation?options ^-> T<unit>
                 "link" => T<float>?x * T<float>?y * T<float>?w * T<float>?h * T<obj>?options ^-> T<unit>
                 "textWithLink" => T<string>?text * T<float>?x * T<float>?y * T<obj>?options ^-> T<int>
-                "getTextWidth" => T<string>?text ^-> T<int>
+                "getTextWidth" => T<string>?text ^-> T<double>
             ]
             
         module AutoPrint =
@@ -1063,6 +1093,7 @@ module Definition =
                     "pdf" =? JsPDFClass
                     "width" =@ T<float>
                     "height" =@ T<float>
+                    "style" =@ T<obj>
                     "getContext" => !? T<string>?``type`` ^-> Context2d
                 ]
             let typesToExport = [Canvas]
@@ -1120,7 +1151,16 @@ module Definition =
             
             let TableCellCss = Pattern.Config "TableCellCss" {
                 Required = [
-                    "font-size", T<int>
+                    ("font-size", T<int>)
+                ]
+                Optional = []
+            }
+            let TableMargins = Pattern.Config "TableMargins" {
+                Required = [
+                    "top", T<float>
+                    "bottom", T<float>
+                    "left", T<float>
+                    "width", T<float>
                 ]
                 Optional = []
             }
@@ -1129,7 +1169,7 @@ module Definition =
                 Optional = [
                     "printHeaders", T<bool>
                     "autoSize", T<bool>
-                    "margins", T<float>
+                    "margins", TableMargins.Type
                     "fontSize", T<int>
                     "padding", T<float>
                     "headerBackgroundColor", T<string>
@@ -1146,6 +1186,7 @@ module Definition =
                 TableRowData
                 TableCellData
                 TableCellCss
+                TableMargins
                 TableConfig
             ]
             let methodsToApply = [
@@ -1157,7 +1198,7 @@ module Definition =
                                * T<System.Collections.Generic.Dictionary<string,string>>?data
                                * (Type.ArrayOf(T<string>) + Type.ArrayOf(CellConfig))?headers * TableConfig?config
                            ^-> JsPDFClass
-                "calculateLineHeight" => Type.ArrayOf(T<string>)?headerNames * Type.ArrayOf(T<int>)?columnWidths * Type.ArrayOf(T<obj>)?model ^-> JsPDFClass
+                "calculateLineHeight" => Type.ArrayOf(T<string>)?headerNames * Type.ArrayOf(T<int>)?columnWidths * Type.ArrayOf(T<obj>)?model ^-> T<double>
                 "setTableHeaderRow" => Type.ArrayOf(CellConfig)?config ^-> T<unit>
                 "printHeaderRow" => T<int>?lineNumber * (!?T<bool>)?new_page ^-> T<unit>
                 
@@ -1173,17 +1214,23 @@ module Definition =
                 ]
             let OutlineOptions = Pattern.Config "OutlineOptions" {
                 Required = [
-                    "pageNumber", T<int>
+                    ("pageNumber", T<int>)
                 ]
                 Optional = [] 
             }
+            let Outline =
+                Class "Outline"
+                |+> Instance [
+                    "add" => T<obj>?parent * T<string>?title * OutlineOptions?options ^-> OutlineItem
+                ]
             
             let typesToExport = [
+                Outline
                 OutlineItem
                 OutlineOptions
             ]
             let methodsToApply = [
-                "add" => T<obj>?parent * T<string>?title * OutlineOptions?options ^-> OutlineItem    
+                "outline" =? Outline
             ]
             
         module FileLoading =
@@ -1198,9 +1245,9 @@ module Definition =
             
         module SplitTextToSize =
             let methodsToApply = [
-                "getCharWidthsArray" => T<string>?text * T<obj>?options ^-> Type.ArrayOf(T<obj>)
-                "getStringUnitWidth" => T<string>?text * T<obj>?options ^-> T<int>
-                "splitTextToSize" => T<string>?text * T<int>?maxLen * T<obj>?options ^-> T<obj>
+                "getCharWidthsArray" => T<string>?text * T<obj>?options ^-> Type.ArrayOf(T<double>)
+                "getStringUnitWidth" => T<string>?text * T<obj>?options ^-> T<double>
+                "splitTextToSize" => T<string>?text * T<int>?maxLen * T<obj>?options ^-> Type.ArrayOf(T<string>)
             ]
         module SVG =
             let methodsToApply = [
@@ -1579,7 +1626,7 @@ module Definition =
                 }
             
             let HTMLFontFace = Pattern.Config "HTMLFontFace" {
-                Required = ["family", T<string>]
+                Required = [("family", T<string>)]
                 Optional = [
                     "style", HTMLFontFaceStyle.Type
                     "stretch", HTMLFontFaceStretch.Type
@@ -1709,6 +1756,7 @@ module Definition =
                 DisplayModeLayout
                 DisplayModePMode
                 PageInfo
+                Font
                 DocumentProperties
                 TextOptionsAlign
                 TextOptionsFlags

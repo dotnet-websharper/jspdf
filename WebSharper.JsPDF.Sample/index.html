@@ -1,26 +1,74 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>WebSharper.JsPDF Sample</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-        /* Don't show the not-yet-loaded templates */
-        [ws-template], [ws-children-template] { display: none; }
-
-        html, body { margin: 0; height: 100%; }
-        .pdf-holder {
-            height: 100vh;
-            width: 100%;
-        }
-    </style>
+    <title>WebSharper.JsPDF — sample</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23dc2626'/%3E%3Cpath d='M4 3h5l3 3v7H4z' fill='white'/%3E%3Cpath d='M9 3v3h3' fill='none' stroke='%23dc2626'/%3E%3C/svg%3E" />
+    <script>
+        // Apply a previously chosen theme before first paint. Light is the
+        // default; the key is shared with Client.fs (themeStorageKey).
+        try {
+            var t = localStorage.getItem('websharper-jspdf-theme');
+            if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) { }
+    </script>
+    <link rel="stylesheet" href="site.css" />
+    <!-- jsPDF is bundled from the npm package; the WebSharper head is folded in here. -->
+    <!-- ws-head -->
 </head>
 <body>
-    <div id="main" ws-children-template="Main">
-        <div class="pdf-holder">
-            <div ws-replace="PDF"></div>
+    <header class="app-header">
+        <div class="app-titles">
+            <h1>WebSharper.JsPDF</h1>
+            <p>jsPDF 4.x bindings for F# — with <a href="https://websharper.com">WebSharper</a></p>
         </div>
-    </div>
-    <script type="module" src="Scripts/WebSharper.JsPDF.Sample.min.js"></script>
+        <div class="app-actions">
+            <button class="btn theme-toggle" ws-onclick="ToggleTheme" title="Switch between the light and dark theme">
+                <span>${themeLabel}</span>
+            </button>
+            <a class="app-source" href="https://github.com/dotnet-websharper/jspdf">Source</a>
+        </div>
+    </header>
+
+    <main class="page">
+        <p class="notice">${notice}</p>
+
+        <section class="card">
+            <header class="card-header">
+                <h2>Generate a PDF</h2>
+                <p>
+                    The document is built in the browser with jsPDF: text, an image,
+                    shapes, wrapped text, AcroForm fields and outline entries. Use the
+                    buttons to regenerate it, add a page or download it.
+                </p>
+            </header>
+            <div class="toolbar">
+                <button class="btn btn-primary" ws-onclick="Regenerate">Regenerate</button>
+                <button class="btn" ws-onclick="AddPage">Add page</button>
+                <button class="btn" ws-onclick="Download">Download</button>
+            </div>
+            <dl class="readout">
+                <div><dt>Pages</dt><dd>${pageCount}</dd></div>
+                <div><dt>Current font</dt><dd>${fontInfo}</dd></div>
+                <div><dt>getTextWidth("WebSharper")</dt><dd>${textInfo}</dd></div>
+            </dl>
+            <p class="status">${status}</p>
+        </section>
+
+        <section class="card preview-card">
+            <header class="card-header">
+                <h2>Preview</h2>
+                <p>
+                    The preview is the <code>blob:</code> URL returned by
+                    <code>OutputAsURL()</code>, rendered in an <code>&lt;object&gt;</code>.
+                    If your browser cannot display PDFs inline, use the download button.
+                </p>
+            </header>
+            <div class="pdf-holder" ws-hole="PDF"></div>
+        </section>
+    </main>
+
+    <script type="text/javascript" src="Scripts/WebSharper.JsPDF.Sample.min.js"></script>
 </body>
 </html>
