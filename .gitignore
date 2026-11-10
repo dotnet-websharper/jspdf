@@ -1,13 +1,17 @@
 /.vs/
-/*.suo
-/*.Tests/Content/
-/*.Sample/Content/
-/build/
-/packages/
-/tools/packages/
+*.suo
 bin/
 obj/
+build/
+dist/
+node_modules/
+/packages/
+/tools/packages/
 /.fake/
-/paket-files/
 /.vscode/
+/paket-files/
 websharper.log
+
+# WebSharper bundle outputs
+/*.Sample/Content/
+/*.Tests/Content/

@@ -10,7 +10,7 @@ licenseUrl https://github.com/dotnet-websharper/jspdf/blob/master/LICENSE.md
 iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 projectUrl https://github.com/dotnet-websharper/jspdf
 description
-    WebSharper bindings for JsPDF 2.5.1+
+    WebSharper bindings for jsPDF 4.x (4.2.1+)
 tags
     Web JavaScript F# C#
 files
