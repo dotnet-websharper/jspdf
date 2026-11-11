@@ -6,7 +6,7 @@ owners
     IntelliFactory
 repositoryType git
 repositoryUrl https://github.com/dotnet-websharper/jspdf/
-licenseUrl https://github.com/dotnet-websharper/jspdf/blob/master/LICENSE.md
+licenseUrl https://github.com/dotnet-websharper/jspdf/blob/main/LICENSE.md
 iconUrl https://github.com/dotnet-websharper/core/raw/websharper50/tools/WebSharper.png
 projectUrl https://github.com/dotnet-websharper/jspdf
 description
